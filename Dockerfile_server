@@ -1,0 +1,11 @@
+FROM golang:1.23.2-alpine
+
+COPY ./mms /app
+
+WORKDIR /app
+
+RUN go mod download
+
+RUN go build -o /go/bin/server cmd/server/main.go
+
+CMD ["/go/bin/server"] 

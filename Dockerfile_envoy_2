@@ -1,0 +1,8 @@
+FROM envoyproxy/envoy-dev:e4955aed5694f9935d674419dbb364e744f697b4
+
+# ติดตั้ง curl โดยใช้แพ็คเกจที่เหมาะสมสำหรับ Envoy image (ขึ้นอยู่กับ base image)
+RUN apt-get update && apt-get install -y curl
+
+# ใส่คำสั่งอื่นๆ ที่ต้องการ (ถ้ามี)
+
+CMD ["/usr/local/bin/envoy", "-c", "/etc/envoy/envoy.yaml"]

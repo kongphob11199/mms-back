@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pb";
+
+import "google/protobuf/timestamp.proto";
+import "mms/pkg/proto/enum.proto";
+
+service UserService {
+  rpc FindAll (Empty) returns (UsersResponse) {}
+  rpc FindPagination (UserPaginationRequest) returns (UsersResponse) {}
+  rpc FindById (UserFindIdRequest) returns (UserResponse) {}
+  rpc CreateCustomer (CreateUserCustomerRequest) returns (StatusResponse) {}
+  rpc UpdateCustomer (UpdateUserCustomerRequest) returns (StatusResponse) {}
+  rpc Create (CreateUserRequest) returns (StatusResponse) {}
+  rpc Update (UpdateUserRequest) returns (StatusResponse) {}
+  rpc Delete (UserFindIdRequest) returns (StatusResponse) {}
+  rpc UpdateStatus (UserStatusRequest) returns (StatusResponse) {}
+}
+
+message Empty {}
+
+message UserPaginationRequest {
+  uint32 page = 1;
+  uint32 page_limit = 2;
+  string search = 3;
+  repeated Role role = 4;
+  repeated StatusUser status_user = 5;
+}
+
+message UserFindIdRequest {
+  uint32 user_id = 1;
+}
+
+message UserStatusRequest {
+  uint32 user_id = 1;
+  StatusUser status_user = 2;
+}
+
+message UserResponse {
+   User user = 1;
+}
+
+message UsersResponse {
+  repeated User users = 1;
+}
+
+message CreateUserRequest {
+  string firstname = 2;
+  string lastname = 3;
+  Gender gender = 4;
+  Role role = 5;
+  google.protobuf.Timestamp birthday = 6;
+}
+
+message UpdateUserRequest {
+  uint32 user_id = 1;
+  string firstname = 2;
+  string lastname = 3;
+  Gender gender = 4;
+  Role role = 5;
+  google.protobuf.Timestamp birthday = 6;
+  StatusUser status_user = 7;
+}
+
+message CreateUserCustomerRequest {
+  string firstname = 2;
+  string lastname = 3;
+  Gender gender = 4;
+  google.protobuf.Timestamp birthday = 5;
+}
+
+message UpdateUserCustomerRequest {
+  uint32 user_id = 1;
+  string firstname = 2;
+  string lastname = 3;
+  Gender gender = 4;
+  google.protobuf.Timestamp birthday = 5;
+}
+
+message User {
+  int32 user_id = 1;
+  string firstname = 2;
+  string lastname = 3;
+  Gender gender = 4;
+  Role role = 5;
+  google.protobuf.Timestamp birthday = 6;
+  google.protobuf.Timestamp create_at = 7;
+  string create_by = 8;
+  google.protobuf.Timestamp update_at = 9;
+  string update_by = 10;
+  StatusUser status_user = 11;
+}
+
+
+
+

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pb";
+
+enum StatusUser  {
+    ACTIVE = 0;
+    INACTIVE = 1;
+    DELETE = 2;
+}
+
+enum Gender {
+    UNKNOWN = 0;
+    MALE = 1;
+    FEMALE = 2;
+}
+
+enum Role {
+    CUSTOMER = 0;
+    EMPLOYEE = 1;
+    ADMIN = 2;
+    SUPERADMIN = 3;
+}
+
+message StatusResponse {
+    Response response = 1;
+}
+
+enum Response {
+    OK = 0;
+    ERROR = 1;
+}

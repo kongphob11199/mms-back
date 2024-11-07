@@ -1,0 +1,53 @@
+version: '3.7'
+
+services:
+
+  dbpostgres:
+    image: postgres:15.5-alpine
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5433:5432"
+    networks:
+      - sanedge
+    restart: unless-stopped
+
+  grpc_server_service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_server
+    env_file:
+      - .env
+    ports:
+      - "50051:50051"
+    restart: on-failure
+    depends_on:
+      - dbpostgres
+    environment:
+      - DB_HOST=dbpostgres
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    networks:
+      - sanedge
+
+  envoy:
+    # image: envoyproxy/envoy-dev:e4955aed5694f9935d674419dbb364e744f697b4
+    build:
+      context: .
+      dockerfile: ./Dockerfile_envoy_2
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    ports:
+      - "50052:50052"
+      - "8080:8080"
+    networks:
+      - sanedge  
+
+networks:
+  sanedge:
+    driver: bridge
