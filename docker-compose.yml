@@ -14,6 +14,8 @@ services:
       - "5433:5432"
     networks:
       - sanedge
+    volumes:
+      - I:\web/postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
 
   grpc_server_service:
@@ -39,7 +41,7 @@ services:
     # image: envoyproxy/envoy-dev:e4955aed5694f9935d674419dbb364e744f697b4
     build:
       context: .
-      dockerfile: ./Dockerfile_envoy_2
+      dockerfile: ./Dockerfile_envoy
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
     ports:
@@ -47,6 +49,9 @@ services:
       - "8080:8080"
     networks:
       - sanedge  
+
+volumes:
+  postgres_data:
 
 networks:
   sanedge:

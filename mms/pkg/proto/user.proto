@@ -90,6 +90,7 @@ message User {
   google.protobuf.Timestamp update_at = 9;
   string update_by = 10;
   StatusUser status_user = 11;
+  string username = 12;
 }
 
 

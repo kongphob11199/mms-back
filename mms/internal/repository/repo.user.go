@@ -2,12 +2,12 @@ package repository
 
 import (
 	"fmt"
-	"log"
 	"mms/internal/dto"
 	"mms/internal/message"
 	"mms/internal/models"
 	"time"
 
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -92,8 +92,24 @@ func (r *repositoryUser) CreateCustomer(req *dto.CreateUserCustomerReq) (*dto.St
 
 	var user models.ModelUser
 
+	var existingUser models.ModelUser
+	if err := r.db.Where("username = ?", req.Username).First(&existingUser).Error; err == nil {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUserDup
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorPasswordHash
+	}
+
 	user.Firstname = req.Firstname
 	user.Lastname = req.Lastname
+	user.Username = req.Username
+	user.Password = string(hashedPassword)
 	user.Gender = req.Gender
 	user.Role = models.CUSTOMER
 	user.Birthday = req.Birthday
@@ -112,7 +128,7 @@ func (r *repositoryUser) CreateCustomer(req *dto.CreateUserCustomerReq) (*dto.St
 			Response: "ERROR",
 		}, message.ErrorUserCreateCustomer
 	}
-	log.Println("new user", user)
+
 	return &dto.StatusResp{
 		Response: "OK",
 	}, nil
@@ -149,8 +165,24 @@ func (r *repositoryUser) Create(req *dto.CreateUserReq) (*dto.StatusResp, error)
 
 	var user models.ModelUser
 
+	var existingUser models.ModelUser
+	if err := r.db.Where("username = ?", req.Username).First(&existingUser).Error; err == nil {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUserDup
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorPasswordHash
+	}
+
 	user.Firstname = req.Firstname
 	user.Lastname = req.Lastname
+	user.Username = req.Username
+	user.Password = string(hashedPassword)
 	user.Gender = req.Gender
 	user.Role = req.Role
 	user.Birthday = req.Birthday

@@ -14,6 +14,8 @@ type ModelUser struct {
 	UpdateAt   time.Time  `json:"update_at" gorm:"type:date;not null"`
 	UpdateBy   string     `json:"update_by" gorm:"type:varchar; not null"`
 	StatusUser StatusUser `json:"status_user" gorm:"type:varchar; not null"`
+	Username   string     `json:"username" gorm:"type:varchar; not null"`
+	Password   string     `json:"password" gorm:"type:varchar; not null"`
 }
 
 type Gender string

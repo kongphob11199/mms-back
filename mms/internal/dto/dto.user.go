@@ -18,6 +18,8 @@ type CreateUserCustomerReq struct {
 	Lastname  string        `json:"lastname"`
 	Gender    models.Gender `json:"gender"`
 	Birthday  time.Time     `json:"birthday"`
+	Username  string        `json:"username"`
+	Password  string        `json:"password"`
 }
 
 type UpdateUserCustomerReq struct {
@@ -33,6 +35,8 @@ type CreateUserReq struct {
 	Gender    models.Gender `json:"gender"`
 	Role      models.Role   `json:"role"`
 	Birthday  time.Time     `json:"birthday"`
+	Username  string        `json:"username"`
+	Password  string        `json:"password"`
 }
 
 type UpdateUserReq struct {
