@@ -16,3 +16,8 @@ type UserService interface {
 	Delete(userId uint32) (*dto.StatusResp, error)
 	UpdateStatus(req *dto.UserStatusReq) (*dto.StatusResp, error)
 }
+
+type AuthService interface {
+	Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error)
+	CheckAuth() (*dto.StatusResp, error)
+}

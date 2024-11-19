@@ -44,6 +44,7 @@ services:
       dockerfile: ./Dockerfile_envoy
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
+    restart: on-failure
     ports:
       - "50052:50052"
       - "8080:8080"

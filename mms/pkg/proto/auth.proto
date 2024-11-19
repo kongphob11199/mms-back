@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pb";
+
+import "mms/pkg/proto/enum.proto";
+
+service AuthService {
+    rpc Login (LoginRequest) returns (LoginResponse) {}
+    rpc CheckAuth (EmptyAuth) returns (StatusResponse) {}
+}
+
+message EmptyAuth {}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string token = 1;
+    Response response = 2;
+}

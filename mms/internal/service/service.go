@@ -4,6 +4,7 @@ import "mms/internal/repository"
 
 type Service struct {
 	User UserService
+	Auth AuthService
 }
 
 type Deps struct {
@@ -13,5 +14,6 @@ type Deps struct {
 func NewService(deps Deps) *Service {
 	return &Service{
 		User: NewServiceUser(deps.Repository.User),
+		Auth: NewServiceAuth(deps.Repository.Auth),
 	}
 }
