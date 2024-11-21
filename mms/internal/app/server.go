@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"mms/internal/handler/gapi"
+	"mms/internal/middleware"
 	"mms/internal/repository"
 	"mms/internal/service"
 
@@ -50,11 +51,11 @@ func RunServer() {
 
 	userGapi := gapi.NewUserHandlerGrpcHandler(services.User)
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.UnaryJWTInterceptor))
 
 	pb.RegisterUserServiceServer(s, userGapi)
 
-	fmt.Println("Server running on port : 50051")
+	fmt.Println("start gRPC server running on port : 50051")
 
 	log.Printf("Server listening at %v", lis.Addr())
 
