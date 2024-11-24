@@ -13,13 +13,10 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-// Secret key สำหรับตรวจสอบ JWT
 var jwtSecret = []byte(viper.GetString("SECRET_KEY"))
 
-// Middleware สำหรับตรวจสอบ JWT
 func JWTInterceptor(ctx context.Context) (context.Context, error) {
 	// ดึง metadata จาก request
-	log.Println("JWTInterceptor : ", viper.GetString("SECRET_KEY"))
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, errors.New("missing metadata")
@@ -59,20 +56,17 @@ func JWTInterceptor(ctx context.Context) (context.Context, error) {
 	return ctx, nil
 }
 
-// UnaryInterceptor สำหรับ gRPC
 func UnaryJWTInterceptor(
 	ctx context.Context,
 	req interface{},
 	info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
 ) (interface{}, error) {
-	// ระบุ RPC methods ที่ต้องการตรวจสอบ JWT
 	secureMethods := map[string]bool{
-		"/your.package.Service/ProtectedMethod": true, // ใส่ชื่อ method ที่ต้องการ
+		"/your.package.Service/ProtectedMethod": true,
 	}
 
-	// ตรวจสอบว่า method นี้ต้องการ JWT หรือไม่
-	log.Println("info.FullMethod : ", info.FullMethod)
+	log.Println("info.FullMethod : ", info.FullMethod, " _ ", !secureMethods[info.FullMethod])
 	if !secureMethods[info.FullMethod] {
 		// ใช้ JWTInterceptor เพื่อตรวจสอบ JWT
 		ctx, err := JWTInterceptor(ctx)
@@ -82,6 +76,5 @@ func UnaryJWTInterceptor(
 		return handler(ctx, req)
 	}
 
-	// หาก method นี้ไม่ต้องการ JWT ก็ผ่านได้เลย
 	return handler(ctx, req)
 }

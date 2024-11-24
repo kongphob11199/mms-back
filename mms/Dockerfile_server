@@ -1,6 +1,6 @@
 FROM golang:1.23.2-alpine
 
-COPY ./mms /app
+COPY . /app
 
 WORKDIR /app
 

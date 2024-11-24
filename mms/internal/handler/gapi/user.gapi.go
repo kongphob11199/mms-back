@@ -50,6 +50,7 @@ func (u *UserHandlerGrpc) FindAll(ctx context.Context, req *pb.Empty) (*pb.Users
 			UpdateAt:   utils.TimeToTimestamp(user.UpdateAt),
 			UpdateBy:   user.UpdateBy,
 			StatusUser: utils.ConvertToPbStatusUser(user.StatusUser),
+			Username:   user.Username,
 		}
 		pbUsers = append(pbUsers, pbUser)
 	}
@@ -91,6 +92,7 @@ func (u *UserHandlerGrpc) FindPagination(ctx context.Context, req *pb.UserPagina
 			UpdateAt:   utils.TimeToTimestamp(user.UpdateAt),
 			UpdateBy:   user.UpdateBy,
 			StatusUser: utils.ConvertToPbStatusUser(user.StatusUser),
+			Username:   user.Username,
 		}
 		pbUsers = append(pbUsers, pbUser)
 	}
@@ -123,6 +125,7 @@ func (u *UserHandlerGrpc) FindById(ctx context.Context, req *pb.UserFindIdReques
 		UpdateAt:   utils.TimeToTimestamp(userRes.UpdateAt),
 		UpdateBy:   userRes.UpdateBy,
 		StatusUser: utils.ConvertToPbStatusUser(userRes.StatusUser),
+		Username:   userRes.Username,
 	}
 
 	res := &pb.UserResponse{User: pbUser}

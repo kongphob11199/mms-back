@@ -1,6 +1,8 @@
 @echo off
 echo Starting CI/CD Process...
 
+cd ./mms
+
 echo Stopping and removing old Docker containers...
 docker-compose down
 

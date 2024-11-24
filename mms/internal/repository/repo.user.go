@@ -143,8 +143,16 @@ func (r *repositoryUser) UpdateCustomer(userId uint32, req *dto.UpdateUserCustom
 		}, message.ErrorUserNotFound
 	}
 
+	err := r.db.Where("username = ? AND id != ?", req.Username, userId).First(&user).Error
+	if err == nil {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUserDup
+	}
+
 	user.Firstname = req.Firstname
 	user.Lastname = req.Lastname
+	user.Username = req.Username
 	user.Gender = req.Gender
 	user.Birthday = req.Birthday
 	user.UpdateAt = time.Now()
@@ -216,8 +224,16 @@ func (r *repositoryUser) Update(userId uint32, req *dto.UpdateUserReq) (*dto.Sta
 		}, message.ErrorUserNotFound
 	}
 
+	err := r.db.Where("username = ? AND id != ?", req.Username, userId).First(&user).Error
+	if err == nil {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUserDup
+	}
+
 	user.Firstname = req.Firstname
 	user.Lastname = req.Lastname
+	user.Username = req.Username
 	user.Gender = req.Gender
 	user.Role = req.Role
 	user.Birthday = req.Birthday

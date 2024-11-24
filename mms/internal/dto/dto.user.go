@@ -27,6 +27,7 @@ type UpdateUserCustomerReq struct {
 	Lastname  string        `json:"lastname"`
 	Gender    models.Gender `json:"gender"`
 	Birthday  time.Time     `json:"birthday"`
+	Username  string        `json:"username"`
 }
 
 type CreateUserReq struct {
@@ -46,6 +47,7 @@ type UpdateUserReq struct {
 	Role       models.Role       `json:"role"`
 	Birthday   time.Time         `json:"birthday"`
 	StatusUser models.StatusUser `json:"statusUser"`
+	Username   string            `json:"username"`
 }
 
 type UserStatusReq struct {

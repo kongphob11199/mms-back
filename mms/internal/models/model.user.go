@@ -2,6 +2,10 @@ package models
 
 import "time"
 
+func (ModelUser) TableName() string {
+	return "users"
+}
+
 type ModelUser struct {
 	UserId     uint32     `json:"user_id" gorm:"primary_key"`
 	Firstname  string     `json:"firstname" gorm:"type:varchar; not null"`
