@@ -15,7 +15,7 @@ services:
     networks:
       - sanedge
     volumes:
-      - I:\web/postgres-data:/var/lib/postgresql/data
+      - ${VOLUNES_DB}
     restart: unless-stopped
 
   grpc_server_service:

@@ -63,11 +63,12 @@ func UnaryJWTInterceptor(
 	handler grpc.UnaryHandler,
 ) (interface{}, error) {
 	secureMethods := map[string]bool{
-		"/your.package.Service/ProtectedMethod": true,
+		"/pb.UserService/CreateCustomer": true,
 	}
 
 	log.Println("info.FullMethod : ", info.FullMethod, " _ ", !secureMethods[info.FullMethod])
 	if !secureMethods[info.FullMethod] {
+		log.Println("check auth")
 		// ใช้ JWTInterceptor เพื่อตรวจสอบ JWT
 		ctx, err := JWTInterceptor(ctx)
 		if err != nil {
@@ -75,6 +76,6 @@ func UnaryJWTInterceptor(
 		}
 		return handler(ctx, req)
 	}
-
+	log.Println("no check auth")
 	return handler(ctx, req)
 }

@@ -134,12 +134,14 @@ func (u *UserHandlerGrpc) FindById(ctx context.Context, req *pb.UserFindIdReques
 }
 
 func (u *UserHandlerGrpc) CreateCustomer(ctx context.Context, req *pb.CreateUserCustomerRequest) (*pb.StatusResponse, error) {
-
+	log.Println("user gapi : CreateCustomer()", req)
 	newReq := &dto.CreateUserCustomerReq{
 		Firstname: req.Firstname,
 		Lastname:  req.Lastname,
 		Gender:    models.Gender(req.GetGender().String()),
 		Birthday:  utils.TimestampToTime(req.Birthday),
+		Username:  req.Username,
+		Password:  req.Password,
 	}
 
 	status, err := u.user.CreateCustomer(newReq)
@@ -162,6 +164,7 @@ func (u *UserHandlerGrpc) UpdateCustomer(ctx context.Context, req *pb.UpdateUser
 		Lastname:  req.Lastname,
 		Gender:    models.Gender(req.GetGender().String()),
 		Birthday:  utils.TimestampToTime(req.Birthday),
+		Username:  req.Username,
 	}
 
 	status, err := u.user.UpdateCustomer(newUserIdReq, newReq)
@@ -185,6 +188,8 @@ func (u *UserHandlerGrpc) Create(ctx context.Context, req *pb.CreateUserRequest)
 		Gender:    models.Gender(req.GetGender().String()),
 		Role:      models.Role(req.GetRole().String()),
 		Birthday:  utils.TimestampToTime(req.Birthday),
+		Username:  req.Username,
+		Password:  req.Password,
 	}
 
 	status, err := u.user.Create(newReq)
@@ -208,6 +213,7 @@ func (u *UserHandlerGrpc) Update(ctx context.Context, req *pb.UpdateUserRequest)
 		Gender:    models.Gender(req.GetGender().String()),
 		Role:      models.Role(req.GetRole().String()),
 		Birthday:  utils.TimestampToTime(req.Birthday),
+		Username:  req.Username,
 	}
 
 	status, err := u.user.Update(newUserIdReq, newReq)
