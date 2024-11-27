@@ -338,3 +338,22 @@ func (r *repositoryUser) UpdateStatus(req *dto.UserStatusReq) (*dto.StatusResp, 
 		Response: "OK",
 	}, nil
 }
+
+func (r *repositoryUser) FindUserByUsername (req *dto.AuthLoginReq) (*dto.UserFindUsernameRes, error) {
+
+	var user models.ModelUser
+
+	if err := r.db.Where("username = ?", req.Username).First(&user).Error; err != nil {
+		return nil, message.ErrorUserNotFound_Login
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
+		return nil, message.ErrorInvalidPassword_Login
+	}
+
+	res := &dto.UserFindUsernameRes{
+		UserId: user.UserId,
+	}
+
+	return res,nil
+}

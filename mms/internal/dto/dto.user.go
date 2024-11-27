@@ -54,3 +54,12 @@ type UserStatusReq struct {
 	UserId     uint32            `json:"userId"`
 	StatusUser models.StatusUser `json:"statusUser"`
 }
+
+type UserFindUsernameReq struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type UserFindUsernameRes struct {
+	UserId uint32 `json:"user_id"`
+}

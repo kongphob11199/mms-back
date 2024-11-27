@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/metadata"
 )
 
-var jwtSecret = []byte(viper.GetString("SECRET_KEY"))
+var JwtSecret = []byte(viper.GetString("SECRET_KEY"))
 
 func JWTInterceptor(ctx context.Context) (context.Context, error) {
 	// ดึง metadata จาก request
@@ -40,7 +40,7 @@ func JWTInterceptor(ctx context.Context) (context.Context, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return jwtSecret, nil
+		return JwtSecret, nil
 	})
 
 	if err != nil || !token.Valid {

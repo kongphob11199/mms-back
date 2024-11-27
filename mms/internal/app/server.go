@@ -50,10 +50,12 @@ func RunServer() {
 	services := service.NewService(service.Deps{Repository: repository})
 
 	userGapi := gapi.NewUserHandlerGrpcHandler(services.User)
+	authGapi := gapi.NewAuthHandlerGrpcHandler(services.Auth)
 
 	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.UnaryJWTInterceptor))
 
 	pb.RegisterUserServiceServer(s, userGapi)
+	pb.RegisterAuthServiceServer(s, authGapi)
 
 	fmt.Println("start gRPC server running on port : 50051")
 

@@ -1,6 +1,8 @@
 package gapi
 
 import (
+	"context"
+
 	"mms/internal/dto"
 	pb "mms/internal/pb"
 	"mms/internal/service"
@@ -12,14 +14,14 @@ type AuthHandlerGrpc struct {
 	auth service.AuthService
 }
 
-func NewAuthHandlerGrpc(auth service.AuthService) *AuthHandlerGrpc {
+func NewAuthHandlerGrpcHandler(auth service.AuthService) *AuthHandlerGrpc {
 	authServer := AuthHandlerGrpc{
 		auth: auth,
 	}
 	return &authServer
 }
 
-func (a *AuthHandlerGrpc) Login(req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (a *AuthHandlerGrpc) Login(ctx context.Context,req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	newReq := &dto.AuthLoginReq{
 		Username: req.Username,
 		Password: req.Password,
@@ -38,7 +40,7 @@ func (a *AuthHandlerGrpc) Login(req *pb.LoginRequest) (*pb.LoginResponse, error)
 	return newRes, nil
 }
 
-func (a *AuthHandlerGrpc) CheckAuth() (*pb.StatusResponse, error) {
+func (a *AuthHandlerGrpc) CheckAuth(ctx context.Context, req *pb.EmptyAuth) (*pb.StatusResponse, error) {
 	res, err := a.auth.CheckAuth()
 	if err != nil {
 		return nil, err

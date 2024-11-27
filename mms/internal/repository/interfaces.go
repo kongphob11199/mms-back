@@ -15,6 +15,7 @@ type UserRepository interface {
 	Update(userId uint32, req *dto.UpdateUserReq) (*dto.StatusResp, error)
 	Delete(userId uint32) (*dto.StatusResp, error)
 	UpdateStatus(req *dto.UserStatusReq) (*dto.StatusResp, error)
+	FindUserByUsername(req *dto.AuthLoginReq) (*dto.UserFindUsernameRes, error)
 }
 
 type AuthRepository interface {
