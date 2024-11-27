@@ -5,6 +5,7 @@ import (
 	"mms/internal/dto"
 	"mms/internal/message"
 	"mms/internal/models"
+	"mms/internal/utils"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -92,11 +93,23 @@ func (r *repositoryUser) CreateCustomer(req *dto.CreateUserCustomerReq) (*dto.St
 
 	var user models.ModelUser
 
+	if len(req.Username) < 4 {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUsernameLength
+	}
+
 	var existingUser models.ModelUser
 	if err := r.db.Where("username = ?", req.Username).First(&existingUser).Error; err == nil {
 		return &dto.StatusResp{
 			Response: "ERROR",
 		}, message.ErrorUserDup
+	}
+
+	if err := utils.ValidatePassword(req.Password); !err {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorPassWordCheck
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -137,6 +150,13 @@ func (r *repositoryUser) CreateCustomer(req *dto.CreateUserCustomerReq) (*dto.St
 func (r *repositoryUser) UpdateCustomer(userId uint32, req *dto.UpdateUserCustomerReq) (*dto.StatusResp, error) {
 
 	var user models.ModelUser
+
+	if len(req.Username) < 4 {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUsernameLength
+	}
+
 	if err := r.db.First(&user, userId).Error; err != nil {
 		return &dto.StatusResp{
 			Response: "ERROR",
@@ -173,11 +193,23 @@ func (r *repositoryUser) Create(req *dto.CreateUserReq) (*dto.StatusResp, error)
 
 	var user models.ModelUser
 
+	if len(req.Username) < 4 {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUsernameLength
+	}
+
 	var existingUser models.ModelUser
 	if err := r.db.Where("username = ?", req.Username).First(&existingUser).Error; err == nil {
 		return &dto.StatusResp{
 			Response: "ERROR",
 		}, message.ErrorUserDup
+	}
+
+	if err := utils.ValidatePassword(req.Password); !err {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorPassWordCheck
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -218,6 +250,13 @@ func (r *repositoryUser) Create(req *dto.CreateUserReq) (*dto.StatusResp, error)
 func (r *repositoryUser) Update(userId uint32, req *dto.UpdateUserReq) (*dto.StatusResp, error) {
 
 	var user models.ModelUser
+
+	if len(req.Username) < 4 {
+		return &dto.StatusResp{
+			Response: "ERROR",
+		}, message.ErrorUsernameLength
+	}
+
 	if err := r.db.First(&user, userId).Error; err != nil {
 		return &dto.StatusResp{
 			Response: "ERROR",

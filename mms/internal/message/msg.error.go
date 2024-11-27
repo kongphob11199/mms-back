@@ -10,4 +10,6 @@ var (
 	ErrorUserUPDATE         = errors.New("FAILED_UPDATE_USER")
 	ErrorUserDup            = errors.New("USER_DUP")
 	ErrorPasswordHash       = errors.New("FAILED_TO_HASH")
+	ErrorUsernameLength     = errors.New("USERNAME_MIN_4")
+	ErrorPassWordCheck      = errors.New("PASSWORD_CHECK")
 )
