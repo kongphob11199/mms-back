@@ -36,6 +36,15 @@ func (s *ServiceAuth) Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error) {
 		return nil, err
 	}
 
+	newReq := &dto.AuthUpdateTokenReq{
+		UserId: user.UserId,
+		Token:  tokenString,
+	}
+
+	if _, err := s.Repository.Login(newReq); err != nil {
+		return nil, err
+	}
+
 	newResp := &dto.AuthLoginResp{
 		Token:    tokenString,
 		Response: dto.OK,
@@ -44,7 +53,17 @@ func (s *ServiceAuth) Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error) {
 	return newResp, nil
 }
 
-func (s *ServiceAuth) CheckAuth() (*dto.StatusResp, error) {
-	res, err := s.Repository.CheckAuth()
+func (s *ServiceAuth) CheckAuth(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error) {
+	res, err := s.Repository.CheckAuth(req)
+	return res, err
+}
+
+func (s *ServiceAuth) Logout(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error) {
+	newReq := &dto.AuthUpdateTokenReq{
+		UserId: req.UserId,
+		Token:  req.Token,
+	}
+
+	res, err := s.Repository.Logout(newReq)
 	return res, err
 }

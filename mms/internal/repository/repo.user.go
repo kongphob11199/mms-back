@@ -95,27 +95,27 @@ func (r *repositoryUser) CreateCustomer(req *dto.CreateUserCustomerReq) (*dto.St
 
 	if len(req.Username) < 4 {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUsernameLength
 	}
 
 	var existingUser models.ModelUser
 	if err := r.db.Where("username = ?", req.Username).First(&existingUser).Error; err == nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserDup
 	}
 
 	if err := utils.ValidatePassword(req.Password); !err {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorPassWordCheck
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorPasswordHash
 	}
 
@@ -138,12 +138,12 @@ func (r *repositoryUser) CreateCustomer(req *dto.CreateUserCustomerReq) (*dto.St
 
 	if addUser.RowsAffected < 1 {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserCreateCustomer
 	}
 
 	return &dto.StatusResp{
-		Response: "OK",
+		Response: dto.OK,
 	}, nil
 }
 
@@ -153,20 +153,20 @@ func (r *repositoryUser) UpdateCustomer(userId uint32, req *dto.UpdateUserCustom
 
 	if len(req.Username) < 4 {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUsernameLength
 	}
 
 	if err := r.db.First(&user, userId).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserNotFound
 	}
 
 	err := r.db.Where("username = ? AND id != ?", req.Username, userId).First(&user).Error
 	if err == nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserDup
 	}
 
@@ -180,12 +180,12 @@ func (r *repositoryUser) UpdateCustomer(userId uint32, req *dto.UpdateUserCustom
 
 	if err := r.db.Debug().Save(&user).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserUpdateCustomer
 	}
 
 	return &dto.StatusResp{
-		Response: "OK",
+		Response: dto.OK,
 	}, nil
 }
 
@@ -195,27 +195,27 @@ func (r *repositoryUser) Create(req *dto.CreateUserReq) (*dto.StatusResp, error)
 
 	if len(req.Username) < 4 {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUsernameLength
 	}
 
 	var existingUser models.ModelUser
 	if err := r.db.Where("username = ?", req.Username).First(&existingUser).Error; err == nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserDup
 	}
 
 	if err := utils.ValidatePassword(req.Password); !err {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorPassWordCheck
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorPasswordHash
 	}
 
@@ -238,12 +238,12 @@ func (r *repositoryUser) Create(req *dto.CreateUserReq) (*dto.StatusResp, error)
 
 	if addUser.RowsAffected < 1 {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserCreateCustomer
 	}
 
 	return &dto.StatusResp{
-		Response: "OK",
+		Response: dto.OK,
 	}, nil
 }
 
@@ -253,20 +253,20 @@ func (r *repositoryUser) Update(userId uint32, req *dto.UpdateUserReq) (*dto.Sta
 
 	if len(req.Username) < 4 {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUsernameLength
 	}
 
 	if err := r.db.First(&user, userId).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserNotFound
 	}
 
 	err := r.db.Where("username = ? AND id != ?", req.Username, userId).First(&user).Error
 	if err == nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserDup
 	}
 
@@ -282,12 +282,12 @@ func (r *repositoryUser) Update(userId uint32, req *dto.UpdateUserReq) (*dto.Sta
 
 	if err := r.db.Debug().Save(&user).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserUpdateCustomer
 	}
 
 	return &dto.StatusResp{
-		Response: "OK",
+		Response: dto.OK,
 	}, nil
 }
 
@@ -296,7 +296,7 @@ func (r *repositoryUser) Delete(userId uint32) (*dto.StatusResp, error) {
 	var user models.ModelUser
 	if err := r.db.First(&user, userId).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserNotFound
 	}
 
@@ -306,12 +306,12 @@ func (r *repositoryUser) Delete(userId uint32) (*dto.StatusResp, error) {
 
 	if err := r.db.Debug().Save(&user).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserUpdateCustomer
 	}
 
 	return &dto.StatusResp{
-		Response: "OK",
+		Response: dto.OK,
 	}, nil
 }
 
@@ -320,7 +320,7 @@ func (r *repositoryUser) UpdateStatus(req *dto.UserStatusReq) (*dto.StatusResp, 
 	var user models.ModelUser
 	if err := r.db.First(&user, req.UserId).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserNotFound
 	}
 
@@ -330,16 +330,16 @@ func (r *repositoryUser) UpdateStatus(req *dto.UserStatusReq) (*dto.StatusResp, 
 
 	if err := r.db.Debug().Save(&user).Error; err != nil {
 		return &dto.StatusResp{
-			Response: "ERROR",
+			Response: dto.ERROR,
 		}, message.ErrorUserUpdateCustomer
 	}
 
 	return &dto.StatusResp{
-		Response: "OK",
+		Response: dto.OK,
 	}, nil
 }
 
-func (r *repositoryUser) FindUserByUsername (req *dto.AuthLoginReq) (*dto.UserFindUsernameRes, error) {
+func (r *repositoryUser) FindUserByUsername(req *dto.AuthLoginReq) (*dto.UserFindUsernameRes, error) {
 
 	var user models.ModelUser
 
@@ -355,5 +355,5 @@ func (r *repositoryUser) FindUserByUsername (req *dto.AuthLoginReq) (*dto.UserFi
 		UserId: user.UserId,
 	}
 
-	return res,nil
+	return res, nil
 }

@@ -8,6 +8,7 @@ import "mms/pkg/proto/enum.proto";
 service AuthService {
     rpc Login (LoginRequest) returns (LoginResponse) {}
     rpc CheckAuth (EmptyAuth) returns (StatusResponse) {}
+    rpc Logout (EmptyAuth) returns (StatusResponse) {}
 }
 
 message EmptyAuth {}

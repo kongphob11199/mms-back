@@ -2,8 +2,10 @@ package gapi
 
 import (
 	"context"
+	"log"
 
 	"mms/internal/dto"
+	"mms/internal/middleware"
 	pb "mms/internal/pb"
 	"mms/internal/service"
 	"mms/internal/utils"
@@ -21,7 +23,7 @@ func NewAuthHandlerGrpcHandler(auth service.AuthService) *AuthHandlerGrpc {
 	return &authServer
 }
 
-func (a *AuthHandlerGrpc) Login(ctx context.Context,req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (a *AuthHandlerGrpc) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
 	newReq := &dto.AuthLoginReq{
 		Username: req.Username,
 		Password: req.Password,
@@ -41,7 +43,16 @@ func (a *AuthHandlerGrpc) Login(ctx context.Context,req *pb.LoginRequest) (*pb.L
 }
 
 func (a *AuthHandlerGrpc) CheckAuth(ctx context.Context, req *pb.EmptyAuth) (*pb.StatusResponse, error) {
-	res, err := a.auth.CheckAuth()
+	claimsFromCtx, ok := ctx.Value("claims").(*middleware.ClaimsContextKey)
+	log.Println("claimsFromCtx : ", ctx, ctx.Value("claims"), ctx.Value("UserId"), ctx.Value("token"))
+	if !ok {
+		log.Panic("claims not found or invalid type")
+	}
+	newReq := &dto.AuthUpdateTokenReq{
+		Token:  claimsFromCtx.Token,
+		UserId: claimsFromCtx.UserId,
+	}
+	res, err := a.auth.CheckAuth(newReq)
 	if err != nil {
 		return nil, err
 	}

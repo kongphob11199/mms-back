@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/spf13/viper"
@@ -14,6 +15,11 @@ import (
 )
 
 var JwtSecret = []byte(viper.GetString("SECRET_KEY"))
+
+type ClaimsContextKey struct {
+	UserId uint32
+	Token  string
+}
 
 func JWTInterceptor(ctx context.Context) (context.Context, error) {
 	// ดึง metadata จาก request
@@ -48,9 +54,23 @@ func JWTInterceptor(ctx context.Context) (context.Context, error) {
 	}
 
 	// เพิ่มข้อมูลจาก JWT ลงใน context หากต้องการ
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if ok {
-		ctx = context.WithValue(ctx, "user", claims["user"])
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		if exp, ok := claims["exp"].(float64); ok && time.Now().Unix() > int64(exp) {
+			return nil, errors.New("token expired")
+		}
+
+		userIDFloat, ok := claims["user_id"].(float64)
+		if !ok {
+			log.Panic("user_id is not a valid float64")
+		}
+		userID := uint32(userIDFloat)
+
+		newClaims := &ClaimsContextKey{
+			UserId: userID,
+			Token:  tokenString,
+		}
+		log.Println("claims : ", claims, newClaims)
+		ctx = context.WithValue(ctx, newClaims, claims)
 	}
 
 	return ctx, nil
@@ -65,6 +85,7 @@ func UnaryJWTInterceptor(
 	secureMethods := map[string]bool{
 		"/pb.UserService/CreateCustomer": true,
 		"/pb.AuthService/Login":          true,
+		"/pb.AuthService/Logout":         true,
 	}
 
 	log.Println("info.FullMethod : ", info.FullMethod, " _ ", !secureMethods[info.FullMethod])

@@ -19,5 +19,6 @@ type UserService interface {
 
 type AuthService interface {
 	Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error)
-	CheckAuth() (*dto.StatusResp, error)
+	CheckAuth(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error)
+	Logout(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error)
 }
