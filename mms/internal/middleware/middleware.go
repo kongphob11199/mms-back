@@ -64,6 +64,7 @@ func UnaryJWTInterceptor(
 ) (interface{}, error) {
 	secureMethods := map[string]bool{
 		"/pb.UserService/CreateCustomer": true,
+		"/pb.AuthService/Login":          true,
 	}
 
 	log.Println("info.FullMethod : ", info.FullMethod, " _ ", !secureMethods[info.FullMethod])

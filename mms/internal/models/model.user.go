@@ -19,7 +19,8 @@ type ModelUser struct {
 	UpdateBy   string     `json:"update_by" gorm:"type:varchar; not null"`
 	StatusUser StatusUser `json:"status_user" gorm:"type:varchar; not null"`
 	Username   string     `json:"username" gorm:"type:varchar; not null"`
-	Password   string     `json:"password" gorm:"type:varchar; not null"`
+	Password   string     `json:"password" gorm:"type:text; not null"`
+	Token      string     `json:"token" gorm:"type:text;"`
 }
 
 type Gender string
