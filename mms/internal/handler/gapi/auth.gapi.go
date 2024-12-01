@@ -44,7 +44,6 @@ func (a *AuthHandlerGrpc) Login(ctx context.Context, req *pb.LoginRequest) (*pb.
 
 func (a *AuthHandlerGrpc) CheckAuth(ctx context.Context, req *pb.EmptyAuth) (*pb.StatusResponse, error) {
 	claimsFromCtx, ok := ctx.Value("claims").(*middleware.ClaimsContextKey)
-	log.Println("claimsFromCtx : ", ctx, ctx.Value("claims"), ctx.Value("UserId"), ctx.Value("token"))
 	if !ok {
 		log.Panic("claims not found or invalid type")
 	}

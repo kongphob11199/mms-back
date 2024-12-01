@@ -12,7 +12,9 @@ var (
 	ErrorPasswordHash       = errors.New("FAILED_TO_HASH")
 	ErrorUsernameLength     = errors.New("USERNAME_MIN_4")
 	ErrorPassWordCheck      = errors.New("PASSWORD_CHECK")
-	// 
-	ErrorUserNotFound_Login = errors.New("NOTFOUND_USER_LOGIN")
+	//
+	ErrorUserNotFound_Login    = errors.New("NOTFOUND_USER_LOGIN")
 	ErrorInvalidPassword_Login = errors.New("INVALID_PASSWORD_LOGIN")
+	//
+	ErrorInvalidToken = errors.New("INVALID_TOKEN")
 )

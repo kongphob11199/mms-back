@@ -69,8 +69,8 @@ func JWTInterceptor(ctx context.Context) (context.Context, error) {
 			UserId: userID,
 			Token:  tokenString,
 		}
-		log.Println("claims : ", claims, newClaims)
-		ctx = context.WithValue(ctx, newClaims, claims)
+		// log.Println("claims : ",  newClaims)
+		ctx = context.WithValue(ctx, "claims", newClaims)
 	}
 
 	return ctx, nil
