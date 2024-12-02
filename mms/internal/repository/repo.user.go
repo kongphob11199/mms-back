@@ -163,7 +163,7 @@ func (r *repositoryUser) UpdateCustomer(userId uint32, req *dto.UpdateUserCustom
 		}, message.ErrorUserNotFound
 	}
 
-	err := r.db.Where("username = ? AND id != ?", req.Username, userId).First(&user).Error
+	err := r.db.Where("username = ? AND user_id != ?", req.Username, userId).First(&user).Error
 	if err == nil {
 		return &dto.StatusResp{
 			Response: dto.ERROR,
@@ -263,7 +263,7 @@ func (r *repositoryUser) Update(userId uint32, req *dto.UpdateUserReq) (*dto.Sta
 		}, message.ErrorUserNotFound
 	}
 
-	err := r.db.Where("username = ? AND id != ?", req.Username, userId).First(&user).Error
+	err := r.db.Where("username = ? AND user_id != ?", req.Username, userId).First(&user).Error
 	if err == nil {
 		return &dto.StatusResp{
 			Response: dto.ERROR,
@@ -352,7 +352,9 @@ func (r *repositoryUser) FindUserByUsername(req *dto.AuthLoginReq) (*dto.UserFin
 	}
 
 	res := &dto.UserFindUsernameRes{
-		UserId: user.UserId,
+		UserId:    user.UserId,
+		Firstname: user.Firstname,
+		Lastname:  user.Lastname,
 	}
 
 	return res, nil

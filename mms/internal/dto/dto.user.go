@@ -61,5 +61,7 @@ type UserFindUsernameReq struct {
 }
 
 type UserFindUsernameRes struct {
-	UserId uint32 `json:"user_id"`
+	UserId    uint32 `json:"user_id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
 }

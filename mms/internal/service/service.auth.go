@@ -26,8 +26,10 @@ func (s *ServiceAuth) Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.UserId,
-		"exp":     time.Now().Add(time.Hour * 14).Unix(),
+		"user_id":   user.UserId,
+		"firstname": user.Firstname,
+		"lastname":  user.Lastname,
+		"exp":       time.Now().Add(time.Hour * 14).Unix(),
 	})
 
 	tokenString, err := token.SignedString(middleware.JwtSecret)

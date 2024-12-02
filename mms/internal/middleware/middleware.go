@@ -17,8 +17,10 @@ import (
 var JwtSecret = []byte(viper.GetString("SECRET_KEY"))
 
 type ClaimsContextKey struct {
-	UserId uint32
-	Token  string
+	UserId    uint32
+	Token     string
+	Firstname string
+	Lastname  string
 }
 
 func JWTInterceptor(ctx context.Context) (context.Context, error) {
@@ -66,8 +68,10 @@ func JWTInterceptor(ctx context.Context) (context.Context, error) {
 		userID := uint32(userIDFloat)
 
 		newClaims := &ClaimsContextKey{
-			UserId: userID,
-			Token:  tokenString,
+			UserId:    userID,
+			Token:     tokenString,
+			Firstname: claims["firstname"].(string),
+			Lastname:  claims["lastname"].(string),
 		}
 		// log.Println("claims : ",  newClaims)
 		ctx = context.WithValue(ctx, "claims", newClaims)
