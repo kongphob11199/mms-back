@@ -4,10 +4,11 @@ package pb;
 option go_package = "./pb";
 
 import "mms/pkg/proto/enum.proto";
+import "mms/pkg/proto/user.proto";
 
 service AuthService {
     rpc Login (LoginRequest) returns (LoginResponse) {}
-    rpc CheckAuth (EmptyAuth) returns (StatusResponse) {}
+    rpc CheckAuth (EmptyAuth) returns (AuthResponse) {}
     rpc Logout (EmptyAuth) returns (StatusResponse) {}
 }
 
@@ -21,4 +22,8 @@ message LoginRequest {
 message LoginResponse {
     string token = 1;
     Response response = 2;
+}
+
+message AuthResponse  {
+    User user = 1;
 }

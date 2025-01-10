@@ -20,6 +20,6 @@ type UserRepository interface {
 
 type AuthRepository interface {
 	Login(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error)
-	CheckAuth(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error)
+	CheckAuth(req *dto.AuthUpdateTokenReq) (*models.ModelUser, error)
 	Logout(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error)
 }

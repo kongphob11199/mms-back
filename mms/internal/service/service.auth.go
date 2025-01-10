@@ -1,10 +1,12 @@
 package service
 
 import (
+	"log"
 	"time"
 
 	"mms/internal/dto"
 	"mms/internal/middleware"
+	"mms/internal/models"
 	"mms/internal/repository"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -34,7 +36,7 @@ func (s *ServiceAuth) Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error) {
 
 	tokenString, err := token.SignedString(middleware.JwtSecret)
 	if err != nil {
-		// log.Println("failed to generate token: %v", err)
+		log.Println("failed to generate token: %v", err)
 		return nil, err
 	}
 
@@ -44,6 +46,7 @@ func (s *ServiceAuth) Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error) {
 	}
 
 	if _, err := s.Repository.Login(newReq); err != nil {
+		log.Println("repository error: %v", err)
 		return nil, err
 	}
 
@@ -55,7 +58,7 @@ func (s *ServiceAuth) Login(req *dto.AuthLoginReq) (*dto.AuthLoginResp, error) {
 	return newResp, nil
 }
 
-func (s *ServiceAuth) CheckAuth(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error) {
+func (s *ServiceAuth) CheckAuth(req *dto.AuthUpdateTokenReq) (*models.ModelUser, error) {
 	res, err := s.Repository.CheckAuth(req)
 	return res, err
 }

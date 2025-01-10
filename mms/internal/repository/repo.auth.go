@@ -40,26 +40,19 @@ func (r *repositoryAuth) Login(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, er
 	return authLogin, nil
 }
 
-func (r *repositoryAuth) CheckAuth(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error) {
+func (r *repositoryAuth) CheckAuth(req *dto.AuthUpdateTokenReq) (*models.ModelUser, error) {
 
 	var user models.ModelUser
 
 	if err := r.db.Where("user_id = ?", req.UserId).First(&user).Error; err != nil {
-		return &dto.StatusResp{
-			Response: dto.ERROR,
-		}, message.ErrorUserNotFound
+		return &models.ModelUser{}, message.ErrorUserNotFound
 	}
 
 	if user.Token != req.Token {
-		return &dto.StatusResp{
-			Response: dto.ERROR,
-		}, message.ErrorInvalidToken
+		return &models.ModelUser{}, message.ErrorInvalidToken
 	}
 
-	res := &dto.StatusResp{
-		Response: dto.OK,
-	}
-	return res, nil
+	return &user, nil
 }
 
 func (r *repositoryAuth) Logout(req *dto.AuthUpdateTokenReq) (*dto.StatusResp, error) {

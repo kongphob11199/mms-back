@@ -42,7 +42,7 @@ func (a *AuthHandlerGrpc) Login(ctx context.Context, req *pb.LoginRequest) (*pb.
 	return newRes, nil
 }
 
-func (a *AuthHandlerGrpc) CheckAuth(ctx context.Context, req *pb.EmptyAuth) (*pb.StatusResponse, error) {
+func (a *AuthHandlerGrpc) CheckAuth(ctx context.Context, req *pb.EmptyAuth) (*pb.AuthResponse, error) {
 	claimsFromCtx, ok := ctx.Value("claims").(*middleware.ClaimsContextKey)
 	if !ok {
 		log.Panic("claims not found or invalid type")
@@ -51,14 +51,27 @@ func (a *AuthHandlerGrpc) CheckAuth(ctx context.Context, req *pb.EmptyAuth) (*pb
 		Token:  claimsFromCtx.Token,
 		UserId: claimsFromCtx.UserId,
 	}
-	res, err := a.auth.CheckAuth(newReq)
+	userRes, err := a.auth.CheckAuth(newReq)
 	if err != nil {
 		return nil, err
 	}
-
-	newRes := &pb.StatusResponse{
-		Response: utils.ConvertToPbResponse(res),
+	log.Println("userRes : ", userRes)
+	pbUser := &pb.User{
+		UserId:     int32(userRes.UserId),
+		Firstname:  userRes.Firstname,
+		Lastname:   userRes.Lastname,
+		Birthday:   utils.TimeToTimestamp(userRes.Birthday),
+		Gender:     utils.ConvertToPbGender(userRes.Gender),
+		Role:       utils.ConvertToPbRole(userRes.Role),
+		CreateAt:   utils.TimeToTimestamp(userRes.CreateAt),
+		CreateBy:   userRes.CreateBy,
+		UpdateAt:   utils.TimeToTimestamp(userRes.UpdateAt),
+		UpdateBy:   userRes.UpdateBy,
+		StatusUser: utils.ConvertToPbStatusUser(userRes.StatusUser),
+		Username:   userRes.Username,
 	}
+
+	newRes := &pb.AuthResponse{User: pbUser}
 
 	return newRes, nil
 }
